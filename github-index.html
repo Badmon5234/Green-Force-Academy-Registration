@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Wave Ventures - Cyberpunk Registration Platform</title>
+    <meta name="description" content="Cyberpunk-themed registration form for Green Wave Ventures training and workshops with real-time data display and Matrix-style visual effects.">
+    <meta name="keywords" content="Green Wave Ventures, cyberpunk, registration, training, workshop, Matrix effects">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #00ff88;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Matrix Rain */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100px;
+            font-size: 14px;
+            color: #00ff88;
+            animation: matrix-fall linear infinite;
+        }
+
+        @keyframes matrix-fall {
+            0% { transform: translateY(-100px); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        /* Scanlines */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            background: linear-gradient(transparent 50%, rgba(0, 255, 136, 0.03) 50%);
+            background-size: 100% 4px;
+            animation: scanlines-move 0.1s linear infinite;
+        }
+
+        @keyframes scanlines-move {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .form-wrapper, .display-wrapper {
+            background: rgba(0, 20, 40, 0.95);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .title {
+            font-size: 2.8rem;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+            text-align: center;
+            margin-bottom: 2rem;
+            letter-spacing: 3px;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            10% { transform: translate(-2px, 2px); }
+            20% { transform: translate(2px, -2px); }
+            30% { transform: translate(-2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #00ff88;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            color: #66ff99;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 8px;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #00ff88;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+            animation: input-glow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes input-glow {
+            0% { box-shadow: 0 0 25px rgba(0, 255, 136, 0.5); }
+            100% { box-shadow: 0 0 35px rgba(0, 255, 136, 0.8); }
+        }
+
+        .checkbox-group, .radio-group {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .checkbox-item, .radio-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover, .radio-item:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        input[type="checkbox"], input[type="radio"] {
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            border: none;
+            padding: 1.5rem 4rem;
+            border-radius: 50px;
+            color: #000;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+            font-family: 'Courier New', monospace;
+            display: block;
+            margin: 2rem auto;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.6);
+        }
+
+        .display-title {
+            font-size: 1.8rem;
+            color: #00ff88;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-display-btn {
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            display: block;
+            margin: 0 auto 2rem;
+        }
+
+        .registration-item {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .confirmation-message {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* GitHub Corner */
+        .github-corner {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .github-corner svg {
+            fill: #00ff88;
+            color: #000;
+            width: 80px;
+            height: 80px;
+        }
+
+        .github-corner:hover .octo-arm {
+            animation: octocat-wave 560ms ease-in-out;
+        }
+
+        @keyframes octocat-wave {
+            0%, 100% { transform: rotate(0); }
+            20%, 60% { transform: rotate(-25deg); }
+            40%, 80% { transform: rotate(10deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- GitHub Corner -->
+    <a href="https://github.com/yourusername/green-wave-registration" class="github-corner" aria-label="View source on GitHub">
+        <svg viewBox="0 0 250 250" aria-hidden="true">
+            <path d="m0,0 0,250 250,0 0,-250z" fill="currentColor"/>
+            <path d="m127.5,110c-5.07,0 -9.16,4.09 -9.16,9.16 0,5.07 4.09,9.16 9.16,9.16 5.07,0 9.16,-4.09 9.16,-9.16 0,-5.07 -4.09,-9.16 -9.16,-9.16z" fill="#00ff88"/>
+            <path d="m200.4,132.4c-6.28,0 -11.4,5.12 -11.4,11.4 0,6.28 5.12,11.4 11.4,11.4 6.28,0 11.4,-5.12 11.4,-11.4 0,-6.28 -5.12,-11.4 -11.4,-11.4z" class="octo-arm" fill="#00ff88"/>
+        </svg>
+    </a>
+
+    <!-- Matrix Rain Effect -->
+    <div class="matrix-rain" id="matrixRain"></div>
+    
+    <!-- Scanlines Effect -->
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <div class="main-wrapper">
+            <div class="form-wrapper">
+                <h1 class="title">GREEN WAVE VENTURES</h1>
+                
+                <form id="registrationForm">
+                    <div class="section">
+                        <h3 class="section-title">Required Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company">Company/Organization *</label>
+                            <input type="text" id="company" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jobTitle">Job Title *</label>
+                            <input type="text" id="jobTitle" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3 class="section-title">Optional Information</h3>
+                        
+                        <div class="form-group">
+                            <label>Primary Interest Areas</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="fire" value="Fire Prevention">
+                                    <label for="fire">Fire Prevention & Resilience</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="materials" value="Sustainable Materials">
+                                    <label for="materials">Sustainable Materials</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="sensors" value="Smart Sensors">
+                                    <label for="sensors">Smart Sensor Technology</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="esg" value="ESG Finance">
+                                    <label for="esg">ESG & Green Finance Solutions</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="training" value="Contractor Training">
+                                    <label for="training">Contractor Training & Certification</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Project Status</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="research" name="status" value="Researching">
+                                    <label for="research">Researching solutions</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="bidding" name="status" value="Bidding">
+                                    <label for="bidding">Actively bidding</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="working" name="status" value="Working">
+                                    <label for="working">Currently working</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="curious" name="status" value="Learning">
+                                    <label for="curious">Just curious/learning</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="companyType">Company Type/Size</label>
+                            <select id="companyType">
+                                <option value="">Select...</option>
+                                <option value="Contractor 1-10">Contractor 1-10 employees</option>
+                                <option value="Developer 11-50">Developer 11-50 employees</option>
+                                <option value="Government">City/Government Official</option>
+                                <option value="Investor">Investor/Financial</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="otherGroup" style="display: none;">
+                            <label for="other">Specify Other</label>
+                            <input type="text" id="other">
+                        </div>
+
+                        <div class="form-group">
+                            <label>How did you hear about us?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="social" value="Social Media">
+                                    <label for="social">Social Media</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="partner" value="Industry Partner">
+                                    <label for="partner">Industry Partner</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="newsletter" value="Newsletter">
+                                    <label for="newsletter">Newsletter</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="referral" value="Referral">
+                                    <label for="referral">Referral</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">REGISTER NOW</button>
+                </form>
+
+                <div id="confirmation" class="confirmation-message" style="display: none;">
+                    <h3>REGISTRATION SUCCESSFUL</h3>
+                    <p>Welcome to the Green Wave Ventures cyberpunk training protocol.</p>
+                </div>
+            </div>
+
+            <div class="display-wrapper">
+                <h3 class="display-title">Live Registration Feed</h3>
+                <button class="toggle-display-btn" id="toggleBtn">ACTIVATE FEED</button>
+                <div id="feedList" style="display: none;">
+                    <p style="color: #666; text-align: center;">Waiting for registrations...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Matrix Rain Effect
+        function createMatrixRain() {
+            const rain = document.getElementById('matrixRain');
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            
+            for (let i = 0; i < 30; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = Math.random() * 100 + '%';
+                column.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                column.style.animationDelay = Math.random() * 2 + 's';
+                
+                let text = '';
+                for (let j = 0; j < 15; j++) {
+                    text += chars.charAt(Math.floor(Math.random() * chars.length)) + '<br>';
+                }
+                column.innerHTML = text;
+                rain.appendChild(column);
+            }
+        }
+
+        // Mock Firestore for demo
+        const mockFirestore = {
+            registrations: JSON.parse(localStorage.getItem('gwv-registrations') || '[]'),
+            
+            async addDoc(data) {
+                const newReg = {
+                    ...data,
+                    id: Date.now(),
+                    timestamp: new Date().toISOString()
+                };
+                this.registrations.unshift(newReg);
+                localStorage.setItem('gwv-registrations', JSON.stringify(this.registrations));
+                this.notifyListeners();
+                return newReg;
+            },
+            
+            listeners: [],
+            onSnapshot(callback) {
+                this.listeners.push(callback);
+                callback(this.registrations);
+            },
+            
+            notifyListeners() {
+                this.listeners.forEach(callback => callback(this.registrations));
+            }
+        };
+
+        // DOM Elements
+        const form = document.getElementById('registrationForm');
+        const companyType = document.getElementById('companyType');
+        const otherGroup = document.getElementById('otherGroup');
+        const confirmation = document.getElementById('confirmation');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const feedList = document.getElementById('feedList');
+
+        let feedActive = false;
+
+        // Show/hide other company field
+        companyType.addEventListener('change', function() {
+            if (this.value === 'Other') {
+                otherGroup.style.display = 'block';
+            } else {
+                otherGroup.style.display = 'none';
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                company: document.getElementById('company').value,
+                jobTitle: document.getElementById('jobTitle').value,
+                phone: document.getElementById('phone').value,
+                companyType: companyType.value === 'Other' ? document.getElementById('other').value : companyType.value,
+                projectStatus: document.querySelector('input[name="status"]:checked')?.value || '',
+                interests: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value),
+                hearAbout: Array.from(document.querySelectorAll('#social:checked, #partner:checked, #newsletter:checked, #referral:checked')).map(cb => cb.value)
+            };
+
+            try {
+                await mockFirestore.addDoc(formData);
+                form.style.display = 'none';
+                confirmation.style.display = 'block';
+            } catch (error) {
+                alert('Registration failed. Please try again.');
+            }
+        });
+
+        // Toggle feed display
+        toggleBtn.addEventListener('click', function() {
+            feedActive = !feedActive;
+            if (feedActive) {
+                this.textContent = 'DEACTIVATE FEED';
+                feedList.style.display = 'block';
+                mockFirestore.onSnapshot(updateFeed);
+            } else {
+                this.textContent = 'ACTIVATE FEED';
+                feedList.style.display = 'none';
+            }
+        });
+
+        // Update feed display
+        function updateFeed(registrations) {
+            if (!feedActive) return;
+            
+            if (registrations.length === 0) {
+                feedList.innerHTML = '<p style="color: #666; text-align: center;">Waiting for registrations...</p>';
+                return;
+            }
+
+            feedList.innerHTML = registrations.slice(0, 10).map(reg => `
+                <div class="registration-item">
+                    <h4>${reg.fullName}</h4>
+                    <p>Company: ${reg.company}</p>
+                    <p>Email: ${reg.email}</p>
+                    <p>Job: ${reg.jobTitle}</p>
+                    <p class="timestamp">${new Date(reg.timestamp).toLocaleString()}</p>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        createMatrixRain();
+    </script>
+</body>
+</html>
