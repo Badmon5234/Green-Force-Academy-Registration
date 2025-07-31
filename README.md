@@ -4,5 +4,5 @@ This repository contains a live, interactive registration form designed for Gree
 The data collected is critical for quantifying market traction and demonstrating value to investors, aligning with our broader business intelligence and growth strategy.
 
 View the Registration Form in real-time by clicking the link below:
-https://www.google.com/search?q=https://badmon5234.github.io/Green-Force-Academy-Registration/
+https://badmon5234.github.io/Green-Force-Academy-Registration/
 
